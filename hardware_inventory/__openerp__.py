@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 {
-  'name': 'HARDWARE',
+  'name': 'SM Hardware',
   'version': '1.0',
   'category': 'SUPERMAS',
   'author': 'SUPERMAS',
