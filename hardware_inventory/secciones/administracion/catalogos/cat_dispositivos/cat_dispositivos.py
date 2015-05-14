@@ -39,13 +39,13 @@ class cat_dispositivos( osv.osv ) :
 		
 		# =========================================  OpenERP Campos Basicos (integer, char, text, float, etc...)  ====================================== #
 		'descripcion' : fields.char( 'Nombre', size = 255, required = True ),
-		'codigo' : fields.char( 'Código', size = 15 ),
+		'codigo' : fields.char( 'Código', size = 3, required = True  ),
 		'activo' : fields.boolean( 'Activo(a)' ),
 	}
 	
 	#Valores por defecto de los campos del diccionario [_columns]
 	_defaults = {
-		'activo' : lambda self, cr, uid, context : True,
+		'activo' : True,
 	}
 	
 	#Restricciones de BD (constraints)
