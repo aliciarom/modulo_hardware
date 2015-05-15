@@ -29,6 +29,7 @@
 			<field name="arch" type="xml">
 				<form string="Dispositivos">
 					<group col="2" colspan="2">
+						<field name="clave"/>
 						<field name="descripcion"/>
 						<field name="codigo"/>
 						<field name="activo"/>

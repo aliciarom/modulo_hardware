@@ -4,15 +4,14 @@
 <openerp>
   <data>
     
-        <menuitem id="top_inventario" name="Hardware Inventory" sequence="2000"/>
+        <menuitem id="top_inventario" name="Hardware" sequence="100"/>
 
-        <menuitem id="top_hardware" name="Hardware" sequence="300" parent="hardware_inventory.top_inventario"/>
-        <menuitem id="top_hardware_lista" name="Hardware" sequence="200" parent="hardware_inventory.top_hardware"/>
+        <menuitem id="top_hardware" name="Hardware" sequence="030" parent="hardware_inventory.top_inventario"/>
+        <menuitem id="top_hardware_lista" name="Hardware" sequence="020" parent="hardware_inventory.top_hardware"/>
         
-        <menuitem id="top_administracion" name="Administration" sequence="1000"/>
-        <menuitem id="top_catalogos" name="Catalogos" sequence="300" parent="hardware_inventory.top_administracion"/>
-        <menuitem id="top_dispositivos" name="Device" sequence="200" parent="hardware_inventory.top_catalogos"/>        
-        
-
+        <menuitem id="top_administracion" name="Administration" sequence="150"/>
+          <menuitem id="top_sucursales" name="Sucursales" sequence="030" parent="hardware_inventory.top_administracion"/>
+          <menuitem id="top_catalogos" name="Catalogos" sequence="050" parent="hardware_inventory.top_administracion"/>
+            <!--<menuitem id="top_dispositivos" name="Device" sequence="200" parent="hardware_inventory.top_catalogos"/>        -->
   </data>
 </openerp>

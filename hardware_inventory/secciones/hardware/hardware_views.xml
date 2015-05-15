@@ -15,7 +15,7 @@
           <field name="key"/>
 					<field name="brad"/>
           <field name="model"/>
-          <field name="store"/>
+          <!--<field name="store"/>-->
 				</tree>
 			</field>
 		</record>
@@ -50,7 +50,8 @@
             <field name="mac_wifi"
                    placeholder="00:00:00:00:00:00"
                    on_change="onchange_mac_wifi(mac_wifi)"/>
-            <field name="store"/>
+            <!--<field name="store"/>-->
+            <field name="sucursal_m2o_id"/>
             <field name="cost_hardware"/>
           </group>
           <group  colspan='2' col='2' >

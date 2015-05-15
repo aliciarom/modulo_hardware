@@ -9,7 +9,7 @@
   'website': 'http://www.supermas.mx',
   'installable': True, 
   'active': False,
-  'description': 'Módulo HARDWARE - Sistema para el inventario de hardware',
+  'description': 'Módulo Hardware - Modulo para el inventario de hardware',
   #This model depends of BASE OpenERP model...
   'depends': [
     'base',
@@ -26,6 +26,7 @@
     'menus.xml',
      'secciones/hardware/hardware_views.xml',
      'secciones/administracion/catalogos/cat_dispositivos/cat_dispositivos.xml',
+     'secciones/administracion/sucursal/sucursal.xml',
   ],
   'demo_xml': [
                ],

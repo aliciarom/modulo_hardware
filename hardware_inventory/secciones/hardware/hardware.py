@@ -30,11 +30,11 @@ class hardware(osv.osv):
   ###                                                                                                                                              ###
   ### //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// ### 
   #---------------------------------------------------------Metodos Privados--------------------------------------------------------------------------
-  def _get_key(self, cr, uid, number, store, device_id, context):
+  def _get_key(self, cr, uid, number, sucursal_id, device_id, context):
     """
     Funcion que obtiene la clave del dispositivo
     * Para OpenERP [key]
-    * Argumentos OpenERP: [cr, uid, number, store, device_id, context]
+    * Argumentos OpenERP: [cr, uid, number, sucursal_id, device_id, context]
     @return key
     """
     cat_id=device_id
@@ -50,9 +50,26 @@ class hardware(osv.osv):
       """,(cat_id,)
     )
     resultado = cr.fetchone()
-    codigoo = resultado[0] if type( resultado ) in ( list, tuple ) else '000'
+    device = resultado[0] if type( resultado ) in ( list, tuple ) else '000'
+
+    #Consulta para obtener el codigo de la sucursal
+    store_id=sucursal_id
+    cr.execute(
+      """
+        SELECT codigo
+        FROM
+        sucursal s
+        INNER JOIN hardware h
+        ON h.sucursal_m2o_id = s.id
+        WHERE h.sucursal_m2o_id=%s
+      """,(store_id,)
+    )
+    resul = cr.fetchone()
+    store = resul[0] if type( resul ) in ( list, tuple ) else '000' 
+    
     number_n = str( ("0" + str(number)) if (number < 10) else number)
-    key_complet = str(store)+ str(codigoo) + str(number_n)
+    
+    key_complet = str(store)+ str(device) + str(number_n)
     key = key_complet.upper()
     return key
   ### //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// ###
@@ -146,9 +163,9 @@ class hardware(osv.osv):
     nuevo_id = None
    
     if vals['key_number'] == 0:
-      raise osv.except_osv(_( 'Notice!' ),_( 'Please fill fields "Key" ' ) )
+      raise osv.except_osv(_( 'Notice!' ),_( 'Please fill fields "Key Number" ' ) )
     
-    vals['key'] = self._get_key( cr, uid, vals['key_number'], vals['store'], vals['dispositivo_m2o_id'], context = None )  
+    vals['key'] = self._get_key( cr, uid, vals['key_number'], vals['sucursal_m2o_id'], vals['dispositivo_m2o_id'], context = None )  
 
     nuevo_id = super( hardware, self ).create( cr, uid, vals, context = context )
     return nuevo_id  
@@ -183,22 +200,28 @@ class hardware(osv.osv):
     'next_maintenance_date':fields.date("Next Maintenance", required=False),
     'status_dic':fields.selection(STATUS, 'Status', required =True ),
     'cost_hardware':fields.float('Cost Hardware', required=False),
-    'store' : fields.selection(
-      (
-        ( 'sm1', 'SM1'),
-        ( 'sm2', 'SM2' ),
-        ( 'sm3', 'SM3' ),
-        ( 'sm4', 'SM4' ),
-        ( 'sm5', 'SM5' ),
-      ),
-      'Location',	required = True,
-    ),
+    # 'store' : fields.selection(
+    #   (
+    #     ( 'sm1', 'SM1'),
+    #     ( 'sm2', 'SM2' ),
+    #     ( 'sm3', 'SM3' ),
+    #     ( 'sm4', 'SM4' ),
+    #     ( 'sm5', 'SM5' ),
+    #   ),
+    #   'Location',	required = True,
+    # ),
   # =====Relaciones [one2many](o2m)=============#
     'dispositivo_m2o_id': fields.many2one(
       'cat_dispositivos',
       'Device Type',
       required = True
     ),
+    
+    'sucursal_m2o_id': fields.many2one(
+      'sucursal',
+      'Location',
+      required = True
+    ),    
 
     
   }
