@@ -56,7 +56,6 @@
           </group>
           <group  colspan='2' col='2' >
             <field name="description" placeholder="Device Description"/>
-            <!--<field name="software_o2m_id"/>-->
           </group>
           <group string="Maintenance" colspan='2' col='6' >
             <field name="last_maintenance_date"/>

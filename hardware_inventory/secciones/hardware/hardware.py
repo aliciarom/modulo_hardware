@@ -32,8 +32,8 @@ class hardware(osv.osv):
   #---------------------------------------------------------Metodos Privados--------------------------------------------------------------------------
   def _get_key(self, cr, uid, number, sucursal_id, device_id, context):
     """
-    Funcion que obtiene la clave del dispositivo
-    * Para OpenERP [key]
+    Funcion que obtiene la codigo del dispositivo y el codigo de la sucursal
+    * Para OpenERP [cr, uid, number, sucursal_id, device_id]
     * Argumentos OpenERP: [cr, uid, number, sucursal_id, device_id, context]
     @return key
     """
