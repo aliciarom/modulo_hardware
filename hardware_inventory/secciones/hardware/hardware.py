@@ -28,50 +28,39 @@ class hardware(osv.osv):
   ###                                                                                                                                              ###
   ###                                                                 METODOS                                                                      ###
   ###                                                                                                                                              ###
-  ### //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// ### 
-  #---------------------------------------------------------Metodos Privados--------------------------------------------------------------------------
-  def _get_key(self, cr, uid, number, sucursal_id, device_id, context):
+  ### //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// ###
+  #--------------------------------------------------Metodo Function-------------------------------------------------------------------------------------------------
+  def _functGetKey( self, cr, uid, ids, name, arg, context = {} ) :
     """
-    Funcion que obtiene la codigo del dispositivo y el codigo de la sucursal
-    * Para OpenERP [cr, uid, number, sucursal_id, device_id]
-    * Argumentos OpenERP: [cr, uid, number, sucursal_id, device_id, context]
-    @return key
-    """
-    cat_id=device_id
-    #Consulta para obtener el codigo del dispositivo
-    cr.execute(
-      """
-        SELECT codigo
-        FROM
-        cat_dispositivos c
-        INNER JOIN hardware h
-        ON h.dispositivo_m2o_id = c.id
-        WHERE h.dispositivo_m2o_id=%s
-      """,(cat_id,)
-    )
-    resultado = cr.fetchone()
-    device = resultado[0] if type( resultado ) in ( list, tuple ) else '000'
+    Funcion que obtiene la clave
+    * Para OpenERP [field.function]
+    * Argumentos OpenERP: [cr, uid, ids, name, arg, context]
+    :return dict
+    """     
+    result = {}
+    for record in self.browse( cr, uid, ids, context ) :
+      codigo_device = ''
+      if (record.dispositivo_m2o_id) != 0: 
+        codigo_device = str( record.dispositivo_m2o_id.codigo )
+      codigo_store = ''
+      if (record.sucursal_m2o_id) != 0: 
+        codigo_store = str( record.sucursal_m2o_id.codigo )
+      number = ''
+      if (record.key_number) != 0: 
+        number = record.key_number
+      #añadiendo un 0 si es menor a 10
+      number_n = str( ("0" + str(number)) if (number < 10) else number)
+      # concatenando clave
+      key_complet = str( codigo_store + codigo_device + number_n )
+      #convirtiendo a mayúsculas
+      key = key_complet.upper()
 
-    #Consulta para obtener el codigo de la sucursal
-    store_id=sucursal_id
-    cr.execute(
-      """
-        SELECT codigo
-        FROM
-        sucursal s
-        INNER JOIN hardware h
-        ON h.sucursal_m2o_id = s.id
-        WHERE h.sucursal_m2o_id=%s
-      """,(store_id,)
-    )
-    resul = cr.fetchone()
-    store = resul[0] if type( resul ) in ( list, tuple ) else '000' 
-    
-    number_n = str( ("0" + str(number)) if (number < 10) else number)
-    
-    key_complet = str(store)+ str(device) + str(number_n)
-    key = key_complet.upper()
-    return key
+      result [record.id] = key
+
+    return result
+  
+  #---------------------------------------------------------Metodos Privados--------------------------------------------------------------------------
+
   ### //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// ###
   ###                                                                                                                                              ###
   ###                                                                 METODOS ONCHANGE                                                             ###
@@ -164,8 +153,6 @@ class hardware(osv.osv):
    
     if vals['key_number'] == 0:
       raise osv.except_osv(_( 'Notice!' ),_( 'Please fill fields "Key Number" ' ) )
-    
-    vals['key'] = self._get_key( cr, uid, vals['key_number'], vals['sucursal_m2o_id'], vals['dispositivo_m2o_id'], context = None )  
 
     nuevo_id = super( hardware, self ).create( cr, uid, vals, context = context )
     return nuevo_id  
@@ -210,7 +197,7 @@ class hardware(osv.osv):
     #   ),
     #   'Location',	required = True,
     # ),
-  # =====Relaciones [one2many](o2m)=============#
+  # ================================ Relaciones [one2many](o2m) =====================================================================================#
     'dispositivo_m2o_id': fields.many2one(
       'cat_dispositivos',
       'Device Type',
@@ -221,10 +208,18 @@ class hardware(osv.osv):
       'sucursal',
       'Location',
       required = True
-    ),    
-
+    ),
+  # ================================== Campos Function ==============================================================================================#  
+    'func_key' : fields.function(
+      _functGetKey,
+      method = True,
+      type = 'char',
+      string = 'Key',
+      store = True,
+    ),
     
   }
+    
   #Valores por defecto de los campos del diccionario [_columns]
   _defaults = {
     'status_dic' : 'active',

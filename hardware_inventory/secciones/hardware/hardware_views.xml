@@ -12,10 +12,11 @@
 			<field name="type">tree</field>
 			<field name="arch" type="xml">
 				<tree string="Inventario de Hardware">
-          <field name="key"/>
+          <field name="func_key"/>
 					<field name="brad"/>
           <field name="model"/>
-          <!--<field name="store"/>-->
+          <field name="serial_number"/>
+          <field name="status_dic"/>
 				</tree>
 			</field>
 		</record>
@@ -30,7 +31,7 @@
           <group colspan='2' col='2'>
           <h1>
 							<label string="Key:"/>
-							<field name="key" class="oe_inline" readonly="1" nolabel="1"/>
+							<field name="func_key" class="oe_inline" readonly="1" nolabel="1"/>
 					</h1>
           </group>
           <group string="Hardware Information" colspan='2' col='4'>
